@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   );
                                 }else {
                                   LocationPermission permission = await Geolocator.checkPermission();
-                                  if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
+                                  if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever ) {
                                     _checkPermission(() => profileController.updateActiveStatus());
                                   }else {
                                     profileController.updateActiveStatus();
@@ -498,7 +498,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if(perm == LocationPermission.deniedForever) await Geolocator.openAppSettings();
         if(GetPlatform.isAndroid) _checkPermission(callback);
       }));
-    }else if(permission == LocationPermission.deniedForever || (GetPlatform.isIOS ? false : permission == LocationPermission.whileInUse)) {
+    }else if(permission == LocationPermission.deniedForever ) {
       Get.dialog(LocationAccessDialog(onConfirm: () async {
         Get.back();
         await Geolocator.openAppSettings();

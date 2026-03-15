@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>926015535595-72p6kq9a4v0n731h7pkk2d18osltfc64.apps.googleusercontent.com</string>
+	<string>926015535595-6lah6miv93vm7nemldkac02l8cevrfqj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.926015535595-72p6kq9a4v0n731h7pkk2d18osltfc64</string>
+	<string>com.googleusercontent.apps.926015535595-6lah6miv93vm7nemldkac02l8cevrfqj</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>926015535595-elq2rav7l31n5ogaulll863h2k8pdbb4.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.siameshop.delivery2</string>
+	<string>com.siameshop.express2</string>
 	<key>PROJECT_ID</key>
 	<string>siame-adfe1</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:926015535595:ios:b635e93a128a6bc23441ae</string>
+	<string>1:926015535595:ios:daafbcd9a9794b5b3441ae</string>
 </dict>
 </plist>
