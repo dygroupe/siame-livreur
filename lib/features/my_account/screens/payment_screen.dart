@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sixam_mart_delivery/helper/route_helper.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
-import 'package:sixam_mart_delivery/util/dimensions.dart';
+import 'package:sixam_mart_delivery/util/dimensions';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
 import 'package:sixam_mart_delivery/features/my_account/widgets/fund_payment_dialog_widget.dart';
 
@@ -114,7 +115,7 @@ class MyInAppBrowser extends InAppBrowser {
     if (kDebugMode) {
       print("\n\nStarted: $url\n\n");
     }
-    _redirect(url.toString());
+    await _redirect(url.toString());
   }
 
   @override
@@ -123,7 +124,7 @@ class MyInAppBrowser extends InAppBrowser {
     if (kDebugMode) {
       print("\n\nStopped: $url\n\n");
     }
-    _redirect(url.toString());
+    await _redirect(url.toString());
   }
 
   @override
@@ -176,11 +177,44 @@ class MyInAppBrowser extends InAppBrowser {
     }
   }
 
-  void _redirect(String url) {
+  Future<void> _redirect(String url) async {
     if (kDebugMode) {
       print('---url---$url');
     }
     if(_canRedirect) {
+      // Handle Wave Payment
+      if (url.startsWith('wave://capture/')) {
+        final String afterCapture = url.substring('wave://capture/'.length);
+        final Uri waveUri = Uri.parse(url);
+        if (await canLaunchUrl(waveUri)) {
+          await launchUrl(waveUri, mode: LaunchMode.externalApplication);
+        } else {
+          final String waveStoreUrl = defaultTargetPlatform == TargetPlatform.iOS
+              ? 'https://apps.apple.com/app/wave-mobile-money/id1523884528'
+              : 'https://play.google.com/store/apps/details?id=com.wave.personal';
+          await launchUrl(Uri.parse(waveStoreUrl), mode: LaunchMode.externalApplication);
+        }
+        return;
+      }
+      
+      // Handle Orange Money
+      if (url.startsWith('orangemoney://') || 
+          url.startsWith('orange-money://') || 
+          url.startsWith('com.orange.orangemoney://') || 
+          url.startsWith('com.orange.maxit://') || 
+          url.startsWith('com.orange.myorange.osn://')) {
+        final Uri orangeMoneyUri = Uri.parse(url);
+        if (await canLaunchUrl(orangeMoneyUri)) {
+          await launchUrl(orangeMoneyUri, mode: LaunchMode.externalApplication);
+        } else {
+          final String orangeMoneyStoreUrl = defaultTargetPlatform == TargetPlatform.iOS
+              ? 'https://apps.apple.com/app/orange-money-senegal/id1447224280' // Orange Money Sénégal
+              : 'https://play.google.com/store/apps/details?id=com.orange.orangemoney';
+          await launchUrl(Uri.parse(orangeMoneyStoreUrl), mode: LaunchMode.externalApplication);
+        }
+        return;
+      }
+
       bool isSuccess = url.contains('${AppConstants.baseUrl}/success?flag=success');
       bool isFailed = url.contains('${AppConstants.baseUrl}/success?flag=fail');
       bool isCancel = url.contains('${AppConstants.baseUrl}/success?flag=cancel');
