@@ -23,6 +23,7 @@ import 'package:sixam_mart_delivery/common/widgets/custom_image_widget.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/profile_bg_widget.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/profile_button_widget.dart';
 import 'package:sixam_mart_delivery/features/profile/widgets/profile_card_widget.dart';
+import 'package:sixam_mart_delivery/features/contract/screens/contract_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -328,6 +329,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Get.toNamed(RouteHelper.getDisbursementRoute());
                   }),
                 ),
+
+              ProfileButtonWidget(iconImage: Images.document, title: 'mon_contrat'.tr, onTap: () {
+                Get.to(() => const ContractScreen());
+              }),
+              const SizedBox(height: Dimensions.paddingSizeSmall),
 
               ProfileButtonWidget(iconImage: Images.document, title: 'terms_condition'.tr, onTap: () {
                 Get.toNamed(RouteHelper.getTermsRoute());

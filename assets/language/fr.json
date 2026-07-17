@@ -1,4 +1,8 @@
 {
+  "mon_contrat": "Mon Contrat",
+  "contract_signed_successfully": "Contrat signé avec succès !",
+  "failed_to_sign_contract": "Échec de la signature du contrat",
+  "aucun_contrat_disponible": "Aucun contrat disponible",
   "suffix_name": "Livraison",
   "sign_in": "Connexion",
   "email": "E-mail",

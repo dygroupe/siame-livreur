@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'package:sixam_mart_delivery/common/controllers/theme_controller.dart';
 import 'package:sixam_mart_delivery/api/api_client.dart';
+import 'package:sixam_mart_delivery/features/contract/controllers/contract_controller.dart';
+import 'package:sixam_mart_delivery/features/contract/domain/repositories/contract_repository.dart';
+import 'package:sixam_mart_delivery/features/contract/domain/repositories/contract_repository_interface.dart';
+import 'package:sixam_mart_delivery/features/contract/domain/services/contract_service.dart';
+import 'package:sixam_mart_delivery/features/contract/domain/services/contract_service_interface.dart';
 import 'package:sixam_mart_delivery/features/address/controllers/address_controller.dart';
 import 'package:sixam_mart_delivery/features/address/domain/repositories/address_repository.dart';
 import 'package:sixam_mart_delivery/features/address/domain/repositories/address_repository_interface.dart';
@@ -111,6 +116,9 @@ Future<Map<String, Map<String, String>>> init() async {
   OrderRepositoryInterface orderRepositoryInterface = OrderRepository(apiClient: Get.find(), sharedPreferences: Get.find());
   Get.lazyPut(() => orderRepositoryInterface);
 
+  ContractRepositoryInterface contractRepositoryInterface = ContractRepository(apiClient: Get.find());
+  Get.lazyPut(() => contractRepositoryInterface);
+
   /// Service Interface
   HtmlServiceInterface htmlServiceInterface = HtmlService(htmlRepositoryInterface: Get.find());
   Get.lazyPut(() => htmlServiceInterface);
@@ -148,6 +156,9 @@ Future<Map<String, Map<String, String>>> init() async {
   OrderServiceInterface orderServiceInterface = OrderService(orderRepositoryInterface: Get.find());
   Get.lazyPut(() => orderServiceInterface);
 
+  ContractServiceInterface contractServiceInterface = ContractService(contractRepositoryInterface: Get.find());
+  Get.lazyPut(() => contractServiceInterface);
+
   /// Service
   Get.lazyPut(() => HtmlService(htmlRepositoryInterface: Get.find()));
   Get.lazyPut(() => DisbursementService(disbursementRepositoryInterface: Get.find()));
@@ -161,6 +172,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => AddressService(addressRepositoryInterface: Get.find()));
   Get.lazyPut(() => AuthService(authRepositoryInterface: Get.find()));
   Get.lazyPut(() => OrderService(orderRepositoryInterface: Get.find()));
+  Get.lazyPut(() => ContractService(contractRepositoryInterface: Get.find()));
 
   /// Controller
   Get.lazyPut(() => HtmlController(htmlServiceInterface: Get.find()));
@@ -176,6 +188,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => AddressController(addressServiceInterface: Get.find()));
   Get.lazyPut(() => AuthController(authServiceInterface: Get.find()));
   Get.lazyPut(() => OrderController(orderServiceInterface: Get.find()));
+  Get.lazyPut(() => ContractController(contractServiceInterface: Get.find()));
 
   /// Retrieving localized data
   Map<String, Map<String, String>> languages = {};

@@ -1,4 +1,8 @@
 {
+  "mon_contrat": "My Contract",
+  "contract_signed_successfully": "Contract signed successfully!",
+  "failed_to_sign_contract": "Failed to sign contract",
+  "aucun_contrat_disponible": "No contract available",
   "suffix_name": "Delivery",
   "sign_in": "Sign In",
   "email": "E-mail",
