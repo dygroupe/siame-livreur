@@ -56,6 +56,9 @@ class AppConstants {
   static const String parcelReturn = '/api/v1/delivery-man/parcel-return';
   static const String getWithdrawList = '/api/v1/delivery-man/get-withdraw-list';
   static const String withdrawRequest = '/api/v1/delivery-man/request-withdraw';
+  static const String getContractUri = '/api/v1/delivery-man/contract/my-contract';
+  static const String signContractUri = '/api/v1/delivery-man/contract/sign';
+  static const String downloadContractUri = '/api/v1/delivery-man/contract/download/';
 
   ///chat url
   static const String getConversationListUri = '/api/v1/delivery-man/message/list';

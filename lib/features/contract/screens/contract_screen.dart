@@ -4,7 +4,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:get/get.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_button_widget.dart';
-import 'package:sixam_mart_delivery/common/widgets/custom_loader_widget.dart';
+import 'package:sixam_mart_delivery/common/widgets/custom_loader.dart';
 import 'package:sixam_mart_delivery/features/contract/controllers/contract_controller.dart';
 import 'package:sixam_mart_delivery/features/contract/widgets/signature_canvas_widget.dart';
 import 'package:sixam_mart_delivery/util/app_constants.dart';
@@ -110,7 +110,7 @@ class _ContractScreenState extends State<ContractScreen> {
                               Text(
                                 isSigned ? 'Contrat Signé' : 'Contrat en attente de signature',
                                 style: robotoBold.copyWith(
-                                  fontSize: Dimensions.fontSizeMedium,
+                                  fontSize: Dimensions.fontSizeLarge,
                                   color: isSigned ? Colors.green[800] : Colors.orange[800],
                                 ),
                               ),
