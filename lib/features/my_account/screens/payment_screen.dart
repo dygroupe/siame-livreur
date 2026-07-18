@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:siame_delivery/helper/route_helper.dart';
-import 'package:siame_delivery/util/dimensions.dart';
-import 'package:siame_delivery/common/widgets/custom_app_bar_widget.dart';
-import 'package:siame_delivery/features/my_account/widgets/fund_payment_dialog_widget.dart';
+import 'package:sixam_mart_delivery/helper/route_helper.dart';
+import 'package:sixam_mart_delivery/util/dimensions.dart';
+import 'package:sixam_mart_delivery/common/widgets/custom_app_bar_widget.dart';
+import 'package:sixam_mart_delivery/features/my_account/widgets/fund_payment_dialog_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class PaymentScreenState extends State<PaymentScreen> {
     if (GetPlatform.isAndroid) {
       await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
 
-      bool swAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USING);
+      bool swAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
       bool swInterceptAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
 
       if (swAvailable && swInterceptAvailable) {
@@ -73,7 +73,7 @@ class PaymentScreenState extends State<PaymentScreen> {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: CustomAppBarWidget(title: 'payment'.tr, onTap: _exitApp),
+        appBar: CustomAppBarWidget(title: 'payment'.tr, onBackPressed: () => _exitApp()),
         body: Center(
           child: SizedBox(
             width: Dimensions.webMaxWidth,
@@ -100,7 +100,7 @@ class MyInAppBrowser extends InAppBrowser {
   final String? redirectUrl;
   MyInAppBrowser({super.windowId, super.initialUserScripts, this.redirectUrl});
 
-  final bool _canRedirect = true;
+  bool _canRedirect = true;
 
   Future<void> _openExternalUrl(String raw) async {
     try {
@@ -350,7 +350,7 @@ class MyInAppBrowser extends InAppBrowser {
           Get.back();
         }
         Get.back();
-        Get.toNamed(RouteHelper.getWalletAddFundSuccessRoute(isSuccess ? 'success' : isFailed ? 'fail' : 'cancel'));
+        Get.toNamed(RouteHelper.getSuccessRoute(isSuccess ? 'success' : isFailed ? 'fail' : 'cancel'));
       }
     }
   }

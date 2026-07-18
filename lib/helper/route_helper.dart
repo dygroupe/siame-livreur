@@ -188,7 +188,8 @@ class RouteHelper {
     GetPage(name: success, page: () => PaymentSuccessfulWidget(success: Get.parameters['status'] == 'success')),
     GetPage(name: payment, page: () {
       String walletPayment = Get.parameters['redirect-url']!;
-      return PaymentScreen(redirectUrl: walletPayment);
+      String paymentMethod = Get.parameters['payment-method'] ?? 'digital';
+      return PaymentScreen(paymentMethod: paymentMethod, redirectUrl: walletPayment);
     }),
     GetPage(name: transactionHistory, page: () => const TransactionHistoryScreen()),
     GetPage(name: cashInHand, page: () => const MyAccountScreen()),
