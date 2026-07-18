@@ -13,6 +13,11 @@ class ContractRepository implements ContractRepositoryInterface {
   }
 
   @override
+  Future<Response> getActiveContract() async {
+    return await apiClient.getData(AppConstants.getActiveContractUri);
+  }
+
+  @override
   Future<Response> signContract(int contractId, String signatureBase64) async {
     return await apiClient.postData(AppConstants.signContractUri, {
       'contract_id': contractId,

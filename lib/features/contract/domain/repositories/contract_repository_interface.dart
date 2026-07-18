@@ -3,5 +3,6 @@ import 'package:sixam_mart_delivery/interface/repository_interface.dart';
 
 abstract class ContractRepositoryInterface implements RepositoryInterface {
   Future<Response> getMyContract();
+  Future<Response> getActiveContract();
   Future<Response> signContract(int contractId, String signatureBase64);
 }

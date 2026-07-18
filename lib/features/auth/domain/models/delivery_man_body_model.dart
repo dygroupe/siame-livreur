@@ -9,6 +9,7 @@ class DeliveryManBodyModel {
   String? earning;
   String? zoneId;
   String? vehicleId;
+  String? contractSignature;
 
   DeliveryManBodyModel({
     this.fName,
@@ -21,6 +22,7 @@ class DeliveryManBodyModel {
     this.earning,
     this.zoneId,
     this.vehicleId,
+    this.contractSignature,
   });
 
   DeliveryManBodyModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class DeliveryManBodyModel {
     earning = json['earning'];
     zoneId = json['zone_id'];
     vehicleId = json['vehicle_id'];
+    contractSignature = json['contract_signature'];
   }
 
   Map<String, String> toJson() {
@@ -48,6 +51,9 @@ class DeliveryManBodyModel {
     data['earning'] = earning!;
     data['zone_id'] = zoneId!;
     data['vehicle_id'] = vehicleId!;
+    if (contractSignature != null) {
+      data['contract_signature'] = contractSignature!;
+    }
     return data;
   }
 }

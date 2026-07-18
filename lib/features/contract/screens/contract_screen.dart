@@ -12,6 +12,8 @@ import 'package:sixam_mart_delivery/util/dimensions.dart';
 import 'package:sixam_mart_delivery/util/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:sixam_mart_delivery/features/auth/controllers/auth_controller.dart';
+
 class ContractScreen extends StatefulWidget {
   const ContractScreen({super.key});
 
@@ -29,7 +31,8 @@ class _ContractScreenState extends State<ContractScreen> {
   }
 
   Future<void> _openDownloadUrl(int contractId) async {
-    final url = Uri.parse('${AppConstants.baseUrl}${AppConstants.downloadContractUri}$contractId');
+    final token = Get.find<AuthController>().getUserToken();
+    final url = Uri.parse('${AppConstants.baseUrl}${AppConstants.downloadContractUri}$contractId?token=$token');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
@@ -143,7 +146,9 @@ class _ContractScreenState extends State<ContractScreen> {
                       boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 5, spreadRadius: 1)],
                     ),
                     child: HtmlWidget(
-                      contract.content ?? '<p>Aucun contenu disponible.</p>',
+                      contract.content != null && !contract.content!.contains('<')
+                          ? contract.content!.replaceAll('\n', '<br>')
+                          : (contract.content ?? '<p>Aucun contenu disponible.</p>'),
                       textStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, height: 1.5),
                     ),
                   ),

@@ -19,6 +19,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sixam_mart_delivery/features/contract/controllers/contract_controller.dart';
+import 'package:sixam_mart_delivery/features/contract/widgets/mandatory_contract_dialog.dart';
 import 'package:sixam_mart_delivery/util/images.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -55,6 +57,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     showDisbursementWarningMessage();
     Get.find<OrderController>().getLatestOrders();
+    _checkContractStatus();
     
     _stream = FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
@@ -87,6 +90,26 @@ class DashboardScreenState extends State<DashboardScreen> {
     if(!widget.fromOrderDetails){
       disbursementHelper.enableDisbursementWarningMessage(true);
     }
+  }
+
+  void _checkContractStatus() {
+    Future.delayed(const Duration(milliseconds: 1200), () async {
+      final contractController = Get.find<ContractController>();
+      await contractController.getMyContract();
+      if (contractController.contract != null) {
+        bool isSigned = (contractController.contract!.deliveryManId != null &&
+            contractController.contract!.status == 2) ||
+            (contractController.contract!.signature != null &&
+             contractController.contract!.signature!.isNotEmpty);
+
+        if (!isSigned) {
+          Get.dialog(
+            const MandatoryContractDialog(),
+            barrierDismissible: false,
+          );
+        }
+      }
+    });
   }
 
   void _navigateRequestPage() {

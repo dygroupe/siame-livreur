@@ -20,14 +20,14 @@ class ContractModel {
   });
 
   ContractModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    content = json['content'];
-    signature = json['signature'];
-    signedAt = json['signed_at'];
-    status = json['status'];
-    deliveryManId = json['delivery_man_id'];
-    createdAt = json['created_at'];
+    id = json['id'] != null ? int.tryParse(json['id'].toString()) : null;
+    title = json['title']?.toString();
+    content = json['content']?.toString();
+    signature = json['signature']?.toString();
+    signedAt = json['signed_at']?.toString();
+    status = json['status'] != null ? int.tryParse(json['status'].toString()) : null;
+    deliveryManId = json['delivery_man_id'] != null ? int.tryParse(json['delivery_man_id'].toString()) : null;
+    createdAt = json['created_at']?.toString();
   }
 
   Map<String, dynamic> toJson() {

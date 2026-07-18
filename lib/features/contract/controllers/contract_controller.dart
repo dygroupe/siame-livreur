@@ -10,6 +10,9 @@ class ContractController extends GetxController implements GetxService {
   ContractModel? _contract;
   ContractModel? get contract => _contract;
 
+  ContractModel? _activeContract;
+  ContractModel? get activeContract => _activeContract;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -21,9 +24,22 @@ class ContractController extends GetxController implements GetxService {
     update();
     Response response = await contractServiceInterface.getMyContract();
     if (response.statusCode == 200 && response.body != null) {
-      _contract = ContractModel.fromJson(response.body);
+      _contract = ContractModel.fromJson(Map<String, dynamic>.from(response.body));
     } else {
       _contract = null;
+    }
+    _isLoading = false;
+    update();
+  }
+
+  Future<void> getActiveContract() async {
+    _isLoading = true;
+    update();
+    Response response = await contractServiceInterface.getActiveContract();
+    if (response.statusCode == 200 && response.body != null) {
+      _activeContract = ContractModel.fromJson(Map<String, dynamic>.from(response.body));
+    } else {
+      _activeContract = null;
     }
     _isLoading = false;
     update();
@@ -35,15 +51,19 @@ class ContractController extends GetxController implements GetxService {
     Response response = await contractServiceInterface.signContract(contractId, signatureBase64);
     bool isSuccess = false;
     if (response.statusCode == 200) {
-      showCustomSnackBar('contract_signed_successfully'.tr, isError: false);
-      if (response.body['contract'] != null) {
-        _contract = ContractModel.fromJson(response.body['contract']);
-      } else {
+      showCustomSnackBar('Contrat signé avec succès !', isError: false);
+      try {
+        if (response.body != null && response.body['contract'] != null) {
+          _contract = ContractModel.fromJson(Map<String, dynamic>.from(response.body['contract']));
+        } else {
+          await getMyContract();
+        }
+      } catch (e) {
         await getMyContract();
       }
       isSuccess = true;
     } else {
-      showCustomSnackBar(response.statusText ?? 'failed_to_sign_contract'.tr, isError: true);
+      showCustomSnackBar(response.statusText ?? 'Échec de la signature du contrat', isError: true);
     }
     _isSigning = false;
     update();

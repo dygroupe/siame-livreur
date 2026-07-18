@@ -22,6 +22,9 @@ import 'package:sixam_mart_delivery/common/widgets/custom_button_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_snackbar_widget.dart';
 import 'package:sixam_mart_delivery/common/widgets/custom_text_field_widget.dart';
 import 'package:sixam_mart_delivery/features/auth/widgets/pass_view_widget.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:sixam_mart_delivery/features/contract/controllers/contract_controller.dart';
+import 'package:sixam_mart_delivery/features/contract/widgets/signature_canvas_widget.dart';
 
 class DmRegistrationScreen extends StatefulWidget {
   const DmRegistrationScreen({super.key});
@@ -49,6 +52,7 @@ class _DmRegistrationScreenState extends State<DmRegistrationScreen> {
   final FocusNode _identityNumberNode = FocusNode();
 
   String? _countryDialCode;
+  String? _contractSignature;
 
   @override
   void initState() {
@@ -58,6 +62,7 @@ class _DmRegistrationScreenState extends State<DmRegistrationScreen> {
     Get.find<AddressController>().resetSelectedDeliveryZone();
     Get.find<AddressController>().getZoneList();
     Get.find<AuthController>().getVehicleList();
+    Get.find<ContractController>().getActiveContract();
   }
 
   @override
@@ -575,6 +580,163 @@ class _DmRegistrationScreenState extends State<DmRegistrationScreen> {
                           const SizedBox(height: Dimensions.paddingSizeLarge),
                         ]),
                       ),
+                      const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                      Text('Contrat de Prestation de Service & Signature', style: robotoBold),
+                      const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                      GetBuilder<ContractController>(builder: (contractController) {
+                        final activeContract = contractController.activeContract;
+                        if (activeContract == null && !contractController.isLoading) {
+                          contractController.getActiveContract();
+                        }
+
+                        return CustomCard(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            if (contractController.isLoading) ...[
+                              const Padding(
+                                padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
+                                child: Center(child: CircularProgressIndicator()),
+                              ),
+                            ] else if (activeContract != null) ...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      activeContract.title ?? 'Contrat Livreur SIAME',
+                                      style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.fullscreen, color: Colors.blue),
+                                    tooltip: 'Lire en plein écran',
+                                    onPressed: () {
+                                      Get.dialog(
+                                        Dialog(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                                            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  activeContract.title ?? 'Contrat Livreur',
+                                                  style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                                                ),
+                                                const SizedBox(height: Dimensions.paddingSizeDefault),
+                                                Expanded(
+                                                  child: SingleChildScrollView(
+                                                    child: HtmlWidget(
+                                                      activeContract.content ?? '',
+                                                      textStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, height: 1.5),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: Dimensions.paddingSizeDefault),
+                                                CustomButtonWidget(
+                                                  buttonText: 'Fermer',
+                                                  onPressed: () => Get.back(),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                              Container(
+                                height: 200,
+                                padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                  border: Border.all(color: Colors.grey[300]!),
+                                ),
+                                child: SingleChildScrollView(
+                                  child: HtmlWidget(
+                                    activeContract.content ?? '<p>Chargement du contrat...</p>',
+                                    textStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, height: 1.4),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+
+                              TextButton.icon(
+                                onPressed: () {
+                                  Get.dialog(
+                                    Dialog(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              activeContract.title ?? 'Contrat Livreur',
+                                              style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                                            ),
+                                            const SizedBox(height: Dimensions.paddingSizeDefault),
+                                            Expanded(
+                                              child: SingleChildScrollView(
+                                                child: HtmlWidget(
+                                                  activeContract.content ?? '',
+                                                  textStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, height: 1.5),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: Dimensions.paddingSizeDefault),
+                                            CustomButtonWidget(
+                                              buttonText: 'J\'ai lu et je comprends',
+                                              onPressed: () => Get.back(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.menu_book, size: 20, color: Colors.blue),
+                                label: Text(
+                                  '📖 Cliquez ici pour lire le contrat en plein écran',
+                                  style: robotoMedium.copyWith(color: Colors.blue, fontSize: Dimensions.fontSizeSmall),
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.paddingSizeDefault),
+                            ] else ...[
+                              Text(
+                                'Impossible de charger le contrat en ligne. Veuillez ré-essayer.',
+                                style: robotoRegular.copyWith(color: Colors.red, fontSize: Dimensions.fontSizeSmall),
+                              ),
+                              const SizedBox(height: Dimensions.paddingSizeSmall),
+                              OutlinedButton(
+                                onPressed: () => contractController.getActiveContract(),
+                                child: const Text('Recharger le contrat'),
+                              ),
+                              const SizedBox(height: Dimensions.paddingSizeDefault),
+                            ],
+
+                            Text(
+                              'Signature Manuscrite Obligatoire :',
+                              style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall),
+                            ),
+                            const SizedBox(height: Dimensions.paddingSizeSmall),
+                            SignatureCanvasWidget(
+                              onSigned: (base64Img) {
+                                setState(() {
+                                  _contractSignature = base64Img;
+                                });
+                              },
+                            ),
+                          ]),
+                        );
+                      }),
+                      const SizedBox(height: Dimensions.paddingSizeLarge),
 
                     ]),
                   ),
@@ -642,12 +804,15 @@ class _DmRegistrationScreenState extends State<DmRegistrationScreen> {
                       showCustomSnackBar('enter_delivery_man_identity_number'.tr);
                     }else if(authController.pickedIdentities.isEmpty) {
                       showCustomSnackBar('please_upload_identity_image'.tr);
+                    }else if(_contractSignature == null || _contractSignature!.isEmpty) {
+                      showCustomSnackBar('Veuillez apposer votre signature manuscrite sur le contrat.');
                     }else {
                       authController.registerDeliveryMan(DeliveryManBodyModel(
                         fName: fName, lName: lName, password: password, phone: numberWithCountryCode, email: email,
                         identityNumber: identityNumber, identityType: authController.selectedIdentityType,
                         earning: authController.selectedDmTypeId, zoneId: addressController.selectedDeliveryZoneId,
                         vehicleId: authController.selectedVehicleId,
+                        contractSignature: _contractSignature,
                       ));
                     }
                   }

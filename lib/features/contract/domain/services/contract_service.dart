@@ -12,6 +12,11 @@ class ContractService implements ContractServiceInterface {
   }
 
   @override
+  Future<Response> getActiveContract() async {
+    return await contractRepositoryInterface.getActiveContract();
+  }
+
+  @override
   Future<Response> signContract(int contractId, String signatureBase64) async {
     return await contractRepositoryInterface.signContract(contractId, signatureBase64);
   }
